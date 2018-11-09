@@ -36,12 +36,12 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
         }
 
         void bind(final int newsIndex){
-            author.setText(newsList.get(newsIndex).getAuthor());
-            title.setText(newsList.get(newsIndex).getTitle());
-            description.setText(newsList.get(newsIndex).getDescription());
-            url.setText(newsList.get(newsIndex).getUrl());
-            urlToImage.setText(newsList.get(newsIndex).getUrlToImage());
-            publishedAt.setText(newsList.get(newsIndex).getPublishedAt());
+            author.setText("Author: " + newsList.get(newsIndex).getAuthor());
+            title.setText("Title: " + newsList.get(newsIndex).getTitle());
+            description.setText("Description: " + newsList.get(newsIndex).getDescription());
+            url.setText("URL: " + newsList.get(newsIndex).getUrl());
+            urlToImage.setText("URL to image: " + newsList.get(newsIndex).getUrlToImage());
+            publishedAt.setText("Published at: " + newsList.get(newsIndex).getPublishedAt());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view){

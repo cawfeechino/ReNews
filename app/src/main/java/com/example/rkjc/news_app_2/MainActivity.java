@@ -1,24 +1,15 @@
 package com.example.rkjc.news_app_2;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -27,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private String results;
     private Toolbar tbar;
     private ArrayList<NewsItem> news = new ArrayList<>();
-    private RecyclerView newsView;
+    private RecyclerView news_recyclerview;
     private NewsRecyclerViewAdapter newsAdapter;
 
     @Override
@@ -35,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tbar = findViewById(R.id.tbar);
-        newsView = findViewById(R.id.newsView);
+        news_recyclerview = findViewById(R.id.news_recyclerview);
         newsAdapter = new NewsRecyclerViewAdapter(this, news);
-        newsView.setAdapter(newsAdapter);
-        newsView.setLayoutManager(new LinearLayoutManager(this));
+        news_recyclerview.setAdapter(newsAdapter);
+        news_recyclerview.setLayoutManager(new LinearLayoutManager(this));
         setSupportActionBar(tbar);
         NewsTask task = new NewsTask();
         task.execute();
