@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerViewAdapter.NewsViewHolder> {
-    ArrayList<NewsItem> newsList;
+    List<NewsItem> newsList;
     Context mContext;
+    private final LayoutInflater mInflator;
+    private NewsItemViewModel viewModel;
 
     public class NewsViewHolder extends RecyclerView.ViewHolder{
         public TextView author;
@@ -39,7 +43,7 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
             author.setText("Author: " + newsList.get(newsIndex).getAuthor());
             title.setText("Title: " + newsList.get(newsIndex).getTitle());
             description.setText("Description: " + newsList.get(newsIndex).getDescription());
-            url.setText("URL: " + newsList.get(newsIndex).getUrl());
+            url.setText(newsList.get(newsIndex).getUrl());
             urlToImage.setText("URL to image: " + newsList.get(newsIndex).getUrlToImage());
             publishedAt.setText("Published at: " + newsList.get(newsIndex).getPublishedAt());
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +57,14 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
         }
     }
 
-    public NewsRecyclerViewAdapter(Context mContext, ArrayList<NewsItem> newsList){
-        this.newsList = newsList;
-        this.mContext = mContext;
+    public NewsRecyclerViewAdapter(Context mContext, NewsItemViewModel viewModel){
+        this.viewModel = viewModel;
+        mInflator = LayoutInflater.from(mContext);
+    }
+
+    void setNewsItems(List<NewsItem> newsItems){
+        newsList = newsItems;
+        notifyDataSetChanged();
     }
 
     @Override

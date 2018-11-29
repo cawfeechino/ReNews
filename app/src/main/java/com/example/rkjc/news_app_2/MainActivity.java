@@ -1,6 +1,9 @@
 package com.example.rkjc.news_app_2;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,37 +23,31 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<NewsItem> news = new ArrayList<>();
     private RecyclerView news_recyclerview;
     private NewsRecyclerViewAdapter newsAdapter;
+    private NewsItemViewModel newsItemViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tbar = findViewById(R.id.tbar);
+        newsItemViewModel = ViewModelProviders.of(this).get(NewsItemViewModel.class);
+
         news_recyclerview = findViewById(R.id.news_recyclerview);
-        newsAdapter = new NewsRecyclerViewAdapter(this, news);
+        newsAdapter = new NewsRecyclerViewAdapter(this, newsItemViewModel);
         news_recyclerview.setAdapter(newsAdapter);
         news_recyclerview.setLayoutManager(new LinearLayoutManager(this));
+        newsItemViewModel.getAllNewsItem().observe(this, new Observer<List<NewsItem>>() {
+            @Override
+            public void onChanged(@Nullable List<NewsItem> newsItems) {
+                newsAdapter.setNewsItems(newsItems);
+            }
+        });
         setSupportActionBar(tbar);
-        NewsTask task = new NewsTask();
-        task.execute();
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-    }
-
-    class NewsTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... voids){
-            try{
-                results = NetworkUtils.getResponseFromHttpUrl(NetworkUtils.buildUrl());
-
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
     }
 
     @Override
@@ -64,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.action_search:
-                fillWithNews(results);
+                newsItemViewModel.update();
         }
         return super.onOptionsItemSelected(item);
     }
