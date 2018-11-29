@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 newsAdapter.setNewsItems(newsItems);
             }
         });
+        news_recyclerview.setHasFixedSize(true);
+        UpdateUtils.scheduleUpdate(this);
         setSupportActionBar(tbar);
     }
 

@@ -9,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,35 +25,27 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
     private NewsItemViewModel viewModel;
 
     public class NewsViewHolder extends RecyclerView.ViewHolder{
-        public TextView author;
+
+        public ImageView image;
         public TextView title;
         public TextView description;
-        public TextView url;
-        public TextView urlToImage;
-        public TextView publishedAt;
 
         public NewsViewHolder(View itemView){
             super(itemView);
-            author = (TextView) itemView.findViewById(R.id.author);
-            title = (TextView) itemView.findViewById(R.id.title);
-            description = (TextView) itemView.findViewById(R.id.description);
-            url = (TextView) itemView.findViewById(R.id.url);
-            urlToImage = (TextView) itemView.findViewById(R.id.urlToImage);
-            publishedAt = (TextView) itemView.findViewById(R.id.publishedAt);
+            image = itemView.findViewById(R.id.image);
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
         }
 
         void bind(final int newsIndex){
-            author.setText("Author: " + newsList.get(newsIndex).getAuthor());
-            title.setText("Title: " + newsList.get(newsIndex).getTitle());
-            description.setText("Description: " + newsList.get(newsIndex).getDescription());
-            url.setText(newsList.get(newsIndex).getUrl());
-            urlToImage.setText("URL to image: " + newsList.get(newsIndex).getUrlToImage());
-            publishedAt.setText("Published at: " + newsList.get(newsIndex).getPublishedAt());
+            Picasso.get().load(Uri.parse(newsList.get(newsIndex).getUrlToImage())).into(image);
+            title.setText(newsList.get(newsIndex).getTitle());
+            description.setText(newsList.get(newsIndex).getPublishedAt() + ". " + newsList.get(newsIndex).getDescription());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view){
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url.getText().toString()));
+                    intent.setData(Uri.parse(newsList.get(newsIndex).getUrl()));
                     mContext.startActivity(intent);
                 }
             });
@@ -59,6 +54,7 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
 
     public NewsRecyclerViewAdapter(Context mContext, NewsItemViewModel viewModel){
         this.viewModel = viewModel;
+        this.mContext = mContext;
         mInflator = LayoutInflater.from(mContext);
     }
 
